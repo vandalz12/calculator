@@ -21,6 +21,11 @@ pipeline {
 				withMaven(maven: "M3") {
 					sh "mvn clean verify"
 				}
+				publishHTML (target: [
+					reportDir: "target/site/jacoco",
+					reportFiles: "index.html",
+					reportName: "JaCoCo Report"
+				])
 			}
 		}
 	}

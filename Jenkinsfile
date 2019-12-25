@@ -16,6 +16,13 @@ pipeline {
 				}
 			}
 		}
+		stage("Code Coverage") {
+			steps {
+				withMaven(maven: "M3") {
+					sh "mvn clean verify"
+				}
+			}
+		}
 	}
 
 }

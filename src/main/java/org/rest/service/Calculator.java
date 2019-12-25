@@ -2,6 +2,11 @@ package org.rest.service;
 
 import org.springframework.stereotype.Service;
 
+/**
+ * 
+ * @author restu
+ *
+ */
 @Service
 public class Calculator {
 

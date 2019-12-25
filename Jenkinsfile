@@ -34,13 +34,6 @@ pipeline {
 				}
 			}
 		}
-		stage("Static code analysis") {
-			steps {
-				withMaven(maven: "M3") {
-					
-				}
-			}
-		}
 	}
 
 }

@@ -34,6 +34,23 @@ pipeline {
 				}
 			}
 		}
+		stage("Package") {
+			steps {
+				withMaven(maven: "M3") {
+					sh "mvn package -Dmaven.test.skip=true"
+				}
+			}
+		}
+		stage("Docker build") {
+			steps {
+				sh "docker build -t vandalz12/calculator ."
+			}
+		}
+		stage("Docker push") {
+			steps {
+				sh "docker push vandalz12/calculator"
+			}
+		}
 	}
 
 }

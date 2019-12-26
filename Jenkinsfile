@@ -43,9 +43,7 @@ pipeline {
 		}
 		stage("Docker build") {
 			steps {
-				script {
-					docker.build("vandalz12/calculator")
-				}
+				sh "docker build -t vandalz12/calculator ."
 			}
 		}
 		stage("Docker push") {

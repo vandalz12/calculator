@@ -8,8 +8,14 @@ pipeline {
 		registry = "vandalz12/calculator"
 		registryCredentials = "dockerhub"
 		dockerImage = ""
+		calculatorNetwork = "calculator-net"
 	}
 	stages {
+		stage("Initialize") {
+			steps {
+				sh "docker network create --driver bridge $calculatorNetwork"
+			}
+		}
 		stage("Compile") {
 			steps {
 				withMaven(maven: "M3") {
@@ -64,21 +70,22 @@ pipeline {
 		}
 		stage("Deploy to staging") {
 			steps {
-				sh "docker run -d --rm -p 8765:8080 --name calculator $registry"
+				sh "docker run -d --rm -p 8765:8080 --net $calculatorNetwork --name calculator $registry"
 			}
 		}
-		/*stage("Acceptance test") {
+		stage("Acceptance test") {
 			steps {
 				sleep 60
 				sh "chmod +x acceptance_test.sh && ./acceptance_test.sh"
 			}
-		}*/
+		}
 	}
 	
-	/*post {
+	post {
 		always {
 			sh "docker stop calculator"
+			sh "docker network rm $calculatorNetwork"
 		}
-	}*/
+	}
 
 }

@@ -64,7 +64,7 @@ pipeline {
 		}
 		stage("Deploy to staging") {
 			steps {
-				sh "docker run -d --rm -p 8765:8080 --name calculator $registry"
+				sh "docker run -d --rm -p 8765:8080 --link jenkins-docker --name calculator $registry"
 			}
 		}
 		/*stage("Acceptance test") {

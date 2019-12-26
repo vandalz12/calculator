@@ -10,11 +10,6 @@ pipeline {
 		dockerImage = ""
 	}
 	stages {
-		stage("Initialize") {
-			steps {
-				sh "docker network create --driver bridge $calculatorNetwork"
-			}
-		}
 		stage("Compile") {
 			steps {
 				withMaven(maven: "M3") {

@@ -8,7 +8,6 @@ pipeline {
 		registry = "vandalz12/calculator"
 		registryCredentials = "dockerhub"
 		dockerImage = ""
-		calculatorNetwork = "calculator-net"
 	}
 	stages {
 		stage("Initialize") {
@@ -70,7 +69,7 @@ pipeline {
 		}
 		stage("Deploy to staging") {
 			steps {
-				sh "docker run -d --rm -p 8765:8080 --net $calculatorNetwork --name calculator $registry"
+				sh "docker run -d --rm -p 8765:8080 --name calculator $registry"
 			}
 		}
 		stage("Acceptance test") {
@@ -84,7 +83,6 @@ pipeline {
 	post {
 		always {
 			sh "docker stop calculator"
-			sh "docker network rm $calculatorNetwork"
 		}
 	}
 

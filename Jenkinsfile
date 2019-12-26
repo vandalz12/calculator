@@ -5,40 +5,36 @@ pipeline {
 		pollSCM('* * * * *')
 	}
 	stages {
+		stage("Initialize") {
+			def dockerHome = tool "docker-jenkins"
+			def mavenHome = tool "M3"
+			env.PATH = "${dockerHome}/bin:${env.PATH}"
+			env.PATH = "${mavenHome}/bin:${env.PATH}"
+		}
 		stage("Compile") {
 			steps {
-				withMaven(maven: "M3") {
-					sh "mvn compile"
-				}
+				sh "mvn compile"
 			}
 		}
 		stage("Unit Test") {
 			steps {
-				withMaven(maven: "M3") {
-					sh "mvn test"
-				}
+				sh "mvn test"
 			}
 		}
 		stage("Code Coverage") {
 			steps {
-				withMaven(maven: "M3") {
-					sh "mvn test jacoco:report@jacoco-report"
-				}
+				sh "mvn test jacoco:report@jacoco-report"
 				publishHTML (target: [
 					reportDir: "target/site/jacoco",
 					reportFiles: "index.html",
 					reportName: "JaCoCo Report"
 				])
-				withMaven(maven: "M3") {
-					sh "mvn jacoco:check@jacoco-check"
-				}
+				sh "mvn jacoco:check@jacoco-check"
 			}
 		}
 		stage("Package") {
 			steps {
-				withMaven(maven: "M3") {
-					sh "mvn package -Dmaven.test.skip=true"
-				}
+				sh "mvn package -Dmaven.test.skip=true"
 			}
 		}
 		stage("Docker build") {

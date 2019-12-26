@@ -6,10 +6,12 @@ pipeline {
 	}
 	stages {
 		stage("Initialize") {
-			def dockerHome = tool "docker-jenkins"
-			def mavenHome = tool "M3"
-			env.PATH = "${dockerHome}/bin:${env.PATH}"
-			env.PATH = "${mavenHome}/bin:${env.PATH}"
+			steps {
+				def dockerHome = tool "docker-jenkins"
+				def mavenHome = tool "M3"
+				env.PATH = "${dockerHome}/bin:${env.PATH}"
+				env.PATH = "${mavenHome}/bin:${env.PATH}"
+			}
 		}
 		stage("Compile") {
 			steps {

@@ -43,16 +43,12 @@ pipeline {
 		}
 		stage("Docker build") {
 			steps {
-				withTool("docker-jenkins") {
-					sh "docker build -t vandalz12/calculator ."
-				}
+				sh "docker build -t vandalz12/calculator ."
 			}
 		}
 		stage("Docker push") {
 			steps {
-				withTool("docker-jenkins") {
-					sh "docker push vandalz12/calculator"
-				}
+				sh "docker push vandalz12/calculator"
 			}
 		}
 	}

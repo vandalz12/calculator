@@ -8,6 +8,7 @@ pipeline {
 		registry = "vandalz12/calculator"
 		registryCredentials = "dockerhub"
 		dockerImage = ""
+		cicdNetwork = "cicd-network"
 	}
 	stages {
 		stage("Compile") {
@@ -64,21 +65,21 @@ pipeline {
 		}
 		stage("Deploy to staging") {
 			steps {
-				sh "docker run -d --rm -p 8765:8080 --link jenkins-docker --name calculator $registry"
+				sh "docker run -d --rm -p 8765:8080 --net=$cicdNetwork --name calculator $registry"
 			}
 		}
-		/*stage("Acceptance test") {
+		stage("Acceptance test") {
 			steps {
 				sleep 60
 				sh "chmod +x acceptance_test.sh && ./acceptance_test.sh"
 			}
-		}*/
+		}
 	}
 	
-	/*post {
+	post {
 		always {
 			sh "docker stop calculator"
 		}
-	}*/
+	}
 
 }

@@ -4,6 +4,11 @@ pipeline {
 	triggers {
 		pollSCM('* * * * *')
 	}
+	environment {
+		registry = "vandalz12/calculator"
+		registryCredentials = "dockerhub"
+		dockerImage = ""
+	}
 	stages {
 		stage("Compile") {
 			steps {
@@ -43,12 +48,23 @@ pipeline {
 		}
 		stage("Docker build") {
 			steps {
-				sh "docker build -t vandalz12/calculator ."
+				script {
+					dockerImage = docker.build(registry)
+				}
 			}
 		}
 		stage("Docker push") {
 			steps {
-				sh "docker push vandalz12/calculator"
+				script {
+					docker.withRegistry("", registryCredentials) {
+						dockerImage.push()
+					}
+				}
+			}
+		}
+		stage("Remove docker image") {
+			steps {
+				sh "docker rmi $registry"
 			}
 		}
 	}
